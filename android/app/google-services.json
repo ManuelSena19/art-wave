@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "994940070419",
+    "project_id": "art-wave-172cf",
+    "storage_bucket": "art-wave-172cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994940070419:android:c6cf8386ded02f3bbfade6",
+        "android_client_info": {
+          "package_name": "com.example.art_wave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhuqU4Zzafq7ZDTNy601b6XgL8Q5GseTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
