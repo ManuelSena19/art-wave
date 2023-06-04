@@ -65,19 +65,20 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
             image: DecorationImage(
                 image: AssetImage("assets/art.png"), fit: BoxFit.cover)),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(50, 120, 50, 120),
           child: Container(
             color: Colors.white,
+            padding: const EdgeInsets.all(20),
             child: ListView(
               children: [
                 Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.fromLTRB(10, 60, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
                   child: const Text(
                     'Art Wave',
                     style: TextStyle(
                         color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                         fontSize: 30),
                   ),
                 ),
@@ -86,21 +87,24 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
                   padding: const EdgeInsets.all(10),
                   child: const Text(
                     'Sign In',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                textFieldWidget(
-                  false,
-                  false,
-                  true,
-                  TextInputType.emailAddress,
-                  emailController,
-                  'Email',
-                  Icons.email_outlined,
-                  null,
+                Form(
+                  key: formKey,
+                  child: textFieldWidget(
+                    false,
+                    false,
+                    true,
+                    TextInputType.emailAddress,
+                    emailController,
+                    'Email',
+                    Icons.email_outlined,
+                    null,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -130,6 +134,8 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
                 ElevatedButton(
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all(0),
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.transparent),
                   ),
                   onPressed: () async {
                     try {
@@ -153,9 +159,14 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
                     }
                   },
                   child: Container(
-                    width: 100,
+                    width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
+                      gradient: const LinearGradient(
+                        colors: [Colors.lightBlueAccent, Colors.orangeAccent],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                     ),
                     child: const Padding(
                       padding: EdgeInsets.all(8),
