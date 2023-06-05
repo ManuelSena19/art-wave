@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         resetPasswordRoute: (context) => const ResetPasswordScreen(),
         verifyEmailRoute: (context) => const VerifyEmailScreen()
       },
-      home: const LoginScreen(),
+      home: const Logic(),
     );
   }
 }
