@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget? appbarWidget(String title){
+PreferredSizeWidget? appbarWidget(Widget widget){
   return AppBar(
     backgroundColor: Colors.transparent,
-    title: Text(title),
+    title: widget,
     centerTitle: true,
     elevation: 0,
   );

@@ -6,6 +6,7 @@ import 'package:art_wave/utilities/show_error_dialog.dart';
 import 'package:art_wave/constants/routes.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -74,12 +75,12 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
-                  child: const Text(
+                  child: Text(
                     'Art Wave',
-                    style: TextStyle(
+                    style: GoogleFonts.vibur(textStyle: const TextStyle(
                         color: Colors.deepOrangeAccent,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30),
+                        fontSize: 30),),
                   ),
                 ),
                 Container(
@@ -270,12 +271,12 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                     Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.fromLTRB(10, 60, 10, 10),
-                      child: const Text(
+                      child: Text(
                         'Art Wave',
-                        style: TextStyle(
+                        style: GoogleFonts.vibur(textStyle: const TextStyle(
                             color: Colors.deepOrangeAccent,
                             fontWeight: FontWeight.bold,
-                            fontSize: 30),
+                            fontSize: 30),),
                       ),
                     ),
                     Container(

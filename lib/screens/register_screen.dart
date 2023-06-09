@@ -7,6 +7,7 @@ import 'package:art_wave/utilities/show_error_dialog.dart';
 import 'package:art_wave/constants/routes.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -92,13 +93,12 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: const Text(
+                  child: Text(
                     'Art Wave',
-                    style: TextStyle(
+                    style: GoogleFonts.vibur(textStyle: const TextStyle(
                         color: Colors.deepOrangeAccent,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30
-                    ),
+                        fontSize: 30),),
                   ),
                 ),
                 Container(
@@ -334,13 +334,12 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                     Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.fromLTRB(10, 25, 10, 10),
-                      child: const Text(
+                      child: Text(
                         'Art Wave',
-                        style: TextStyle(
-                          color: Colors.deepOrangeAccent,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30
-                        ),
+                        style: GoogleFonts.vibur(textStyle: const TextStyle(
+                            color: Colors.deepOrangeAccent,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30),),
                       ),
                     ),
                     Container(

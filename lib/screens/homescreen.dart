@@ -1,4 +1,5 @@
 import 'package:art_wave/utilities/category_tile.dart';
+import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,16 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Art Wave',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: ClipOval(child: Image.asset('logo.png', fit: BoxFit.fill, height: 45, width: 50,)),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
+      drawer: drawerWidget(context),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(20),
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
@@ -33,26 +32,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   categoryTileWidget('Digital Art', Colors.deepOrangeAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Sketches', Colors.lightBlueAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Anime', Colors.green),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Contemporary', Colors.redAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('NFTs', Colors.orangeAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Cultural', Colors.purpleAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Paintings', Colors.blueAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Abstract', Colors.pinkAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   categoryTileWidget('Decoration', Colors.tealAccent),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                 ],
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(
+                height: 30,
+              ),
               Container(
                 width: double.infinity,
                 height: 500,
@@ -150,14 +169,224 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 25,
               ),
               const Divider(thickness: 3),
-              const Text('Featured', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
               const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Featured',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
                 height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
               ),
               const Divider(thickness: 3),
-              const Text('Top Artists', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
               const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Top Artists',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
                 height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Trending',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'On Sale',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Budget Finds',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
               ),
               const Divider(thickness: 3),
             ],
@@ -166,4 +395,81 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget artCard() {
+  return SizedBox(
+    width: 300,
+    child: Column(
+      children: [
+        SizedBox(
+          height: 300,
+          width: 300,
+          child: Image.asset(
+            "assets/no_photo.jpg",
+            fit: BoxFit.fill,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Text(
+          'Title',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const Text(
+          "0.00",
+          style: TextStyle(fontSize: 15),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const Text(
+          'Artist',
+          style: TextStyle(color: Colors.orangeAccent, fontSize: 15),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget artistCard() {
+  return SizedBox(
+    width: 300,
+    child: Column(
+      children: [
+        SizedBox(
+          height: 300,
+          width: 300,
+          child: Image.asset(
+            "assets/user.jpg",
+            fit: BoxFit.fill,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Column(
+              children: [
+                Text('Name'),
+                SizedBox(
+                  height: 25,
+                ),
+                Text('Rating'),
+              ],
+            ),
+            Expanded(child: Container()),
+            ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: Colors.orange), child: const Text('Follow'),)
+          ],
+        )
+      ],
+    ),
+  );
 }
