@@ -4,3 +4,6 @@ const loginRoute = '/login-screen/';
 const logicRoute = '/logic/';
 const resetPasswordRoute = '/reset-password-screen/';
 const verifyEmailRoute = '/verify-email-screen/';
+const loadingRoute = '/loading-screen/';
+const profileRoute = '/profile-screen/';
+const editProfileRoute = '/profile-editor-screen/';

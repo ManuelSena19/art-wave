@@ -1,24 +1,62 @@
+import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/category_tile.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return const HomeScreenWeb();
+    } else {
+      if (Platform.isAndroid) {
+        return const HomeScreenAndroid();
+      } else {
+        return const Placeholder();
+      }
+    }
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenAndroid extends StatefulWidget {
+  const HomeScreenAndroid({super.key});
+
+  @override
+  State<HomeScreenAndroid> createState() => _HomeScreenAndroidState();
+}
+
+class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class HomeScreenWeb extends StatefulWidget {
+  const HomeScreenWeb({super.key});
+
+  @override
+  State<HomeScreenWeb> createState() => _HomeScreenWebState();
+}
+
+class _HomeScreenWebState extends State<HomeScreenWeb> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: ClipOval(child: Image.asset('logo.png', fit: BoxFit.fill, height: 45, width: 50,)),
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black),
+      appBar: appbarWidget(
+        context,
+        ClipOval(
+          child: Image.asset(
+            'logo.png',
+            fit: BoxFit.fill,
+            height: 45,
+            width: 50,
+          ),
+        ),
       ),
       drawer: drawerWidget(context),
       body: SafeArea(
@@ -466,7 +504,11 @@ Widget artistCard() {
               ],
             ),
             Expanded(child: Container()),
-            ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: Colors.orange), child: const Text('Follow'),)
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              child: const Text('Follow'),
+            )
           ],
         )
       ],

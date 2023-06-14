@@ -1,6 +1,9 @@
 import 'package:art_wave/constants/logic.dart';
 import 'package:art_wave/screens/homescreen.dart';
+import 'package:art_wave/screens/loading_screen.dart';
 import 'package:art_wave/screens/login_screen.dart';
+import 'package:art_wave/screens/profile_editor_screen.dart';
+import 'package:art_wave/screens/profile_screen.dart';
 import 'package:art_wave/screens/register_screen.dart';
 import 'package:art_wave/screens/reset_password_screen.dart';
 import 'package:art_wave/screens/verify_email_screen.dart';
@@ -35,7 +38,10 @@ class MyApp extends StatelessWidget {
         registerRoute: (context) => const RegisterScreen(),
         logicRoute: (context) => const Logic(),
         resetPasswordRoute: (context) => const ResetPasswordScreen(),
-        verifyEmailRoute: (context) => const VerifyEmailScreen()
+        verifyEmailRoute: (context) => const VerifyEmailScreen(),
+        loadingRoute: (context) => const LoadingScreen(),
+        profileRoute: (context) => const ProfileScreen(),
+        editProfileRoute: (context) => const EditProfile(),
       },
       home: const Logic(),
     );

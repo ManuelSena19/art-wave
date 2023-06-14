@@ -1,4 +1,5 @@
 import 'package:art_wave/constants/push_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:art_wave/constants/routes.dart';
@@ -48,7 +49,9 @@ Widget drawerWidget(BuildContext context) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           iconColor: Colors.orange,
-          onTap: () {},
+          onTap: () {
+            pushRoute(context, profileRoute);
+          },
         ),
         const SizedBox(
           height: 10,
@@ -120,7 +123,10 @@ Widget drawerWidget(BuildContext context) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           iconColor: Colors.orange,
-          onTap: () {},
+          onTap: () {
+            FirebaseAuth.instance.signOut();
+            pushReplacementRoute(context, loginRoute);
+          },
         ),
         const Divider(
           thickness: 3,
