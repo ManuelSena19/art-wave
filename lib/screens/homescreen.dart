@@ -49,14 +49,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
     return Scaffold(
       appBar: appbarWidget(
         context,
-        ClipOval(
-          child: Image.asset(
-            'logo.png',
-            fit: BoxFit.fill,
-            height: 45,
-            width: 50,
-          ),
-        ),
       ),
       drawer: drawerWidget(context),
       body: SafeArea(

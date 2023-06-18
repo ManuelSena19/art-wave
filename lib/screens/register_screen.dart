@@ -95,10 +95,12 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                   child: Text(
                     'Art Wave',
-                    style: GoogleFonts.vibur(textStyle: const TextStyle(
-                        color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),),
+                    style: GoogleFonts.vibur(
+                      textStyle: const TextStyle(
+                          color: Colors.deepOrangeAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
                   ),
                 ),
                 Container(
@@ -166,10 +168,9 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                 ElevatedButton(
                   style: ButtonStyle(
                     elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent),
-                    shape:
-                    MaterialStateProperty.all<RoundedRectangleBorder>(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.transparent),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -184,7 +185,7 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                       if (form.validate()) {}
                       await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
-                          email: email, password: password);
+                              email: email, password: password);
                       addUser(email, username);
                       pushReplacementRoute(logicRoute);
                     } on FirebaseAuthException catch (e) {
@@ -192,8 +193,7 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                         await showErrorDialog(context,
                             "Weak password : Password should be above 6 characters");
                       } else if (e.code == 'invalid-password') {
-                        await showErrorDialog(
-                            context, 'Invalid-password');
+                        await showErrorDialog(context, 'Invalid-password');
                       } else if (e.code == 'email-already-in-use') {
                         await showErrorDialog(context,
                             'Email belongs to other user: Register with a different email');
@@ -211,10 +211,7 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       gradient: const LinearGradient(
-                        colors: [
-                          Colors.lightBlueAccent,
-                          Colors.orangeAccent
-                        ],
+                        colors: [Colors.lightBlueAccent, Colors.orangeAccent],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -242,7 +239,8 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                     TextButton(
                       child: const Text(
                         'Sign In',
-                        style: TextStyle(fontSize: 15, color: Colors.lightBlueAccent),
+                        style: TextStyle(
+                            fontSize: 15, color: Colors.lightBlueAccent),
                       ),
                       onPressed: () {
                         pushReplacementRoute(loginRoute);
@@ -256,7 +254,8 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                   },
                   child: const Text(
                     'Forgot Password?',
-                    style: TextStyle(fontSize: 15, color: Colors.lightBlueAccent),
+                    style:
+                        TextStyle(fontSize: 15, color: Colors.lightBlueAccent),
                   ),
                 ),
               ],
@@ -267,7 +266,6 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
     );
   }
 }
-
 
 class RegisterScreenWeb extends StatefulWidget {
   const RegisterScreenWeb({Key? key}) : super(key: key);
@@ -336,10 +334,12 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                       padding: const EdgeInsets.fromLTRB(10, 25, 10, 10),
                       child: Text(
                         'Art Wave',
-                        style: GoogleFonts.vibur(textStyle: const TextStyle(
-                            color: Colors.deepOrangeAccent,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),),
+                        style: GoogleFonts.vibur(
+                          textStyle: const TextStyle(
+                              color: Colors.deepOrangeAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30),
+                        ),
                       ),
                     ),
                     Container(
@@ -405,17 +405,17 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                       height: 40,
                     ),
                     ElevatedButton(
-                        style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.transparent),
-                          shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                      style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
+                      ),
                       onPressed: () async {
                         try {
                           String username = usernameController.text;
@@ -425,7 +425,7 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                           if (form.validate()) {}
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
-                              email: email, password: password);
+                                  email: email, password: password);
                           addUser(email, username);
                           pushReplacementRoute(logicRoute);
                         } on FirebaseAuthException catch (e) {
@@ -433,8 +433,7 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                             await showErrorDialog(context,
                                 "Weak password : Password should be above 6 characters");
                           } else if (e.code == 'invalid-password') {
-                            await showErrorDialog(
-                                context, 'Invalid-password');
+                            await showErrorDialog(context, 'Invalid-password');
                           } else if (e.code == 'email-already-in-use') {
                             await showErrorDialog(context,
                                 'Email belongs to other user: Register with a different email');
@@ -483,7 +482,8 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                         TextButton(
                           child: const Text(
                             'Sign In',
-                            style: TextStyle(fontSize: 15, color: Colors.lightBlueAccent),
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.lightBlueAccent),
                           ),
                           onPressed: () {
                             pushReplacementRoute(loginRoute);
@@ -497,7 +497,8 @@ class _RegisterScreenWebState extends State<RegisterScreenWeb> {
                       },
                       child: const Text(
                         'Forgot Password?',
-                        style: TextStyle(fontSize: 15, color: Colors.lightBlueAccent),
+                        style: TextStyle(
+                            fontSize: 15, color: Colors.lightBlueAccent),
                       ),
                     ),
                   ],

@@ -2,6 +2,8 @@ import 'package:art_wave/constants/push_routes.dart';
 import 'package:art_wave/constants/routes.dart';
 import 'package:art_wave/constants/user_data.dart';
 import 'package:art_wave/screens/loading_screen.dart';
+import 'package:art_wave/utilities/appbar_widget.dart';
+import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -74,7 +76,11 @@ class _ProfileScreenWebState extends State<ProfileScreenWeb> {
                 ),
               );
             } else {
-              return const Placeholder();
+              return Scaffold(
+                appBar: appbarWidget(context),
+                drawer: drawerWidget(context),
+                body: const Placeholder(),
+              );
             }
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
