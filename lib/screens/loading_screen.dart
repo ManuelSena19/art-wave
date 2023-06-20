@@ -6,9 +6,14 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 3,
-      child: Lottie.asset("assets/loading.json"),
+    return Flex(
+      direction: Axis.vertical,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Lottie.asset("assets/loading.json"),
+        ),
+      ],
     );
   }
 }

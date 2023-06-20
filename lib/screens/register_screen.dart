@@ -1,3 +1,4 @@
+import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/text_field_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
@@ -66,6 +67,36 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
       'username': username,
       'email': email,
     });
+  }
+
+  void onPressed() async {
+    try {
+      String username = usernameController.text;
+      String email = emailController.text;
+      String password = passwordController.text;
+      final form = formKey.currentState!;
+      if (form.validate()) {}
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      addUser(email, username);
+      pushReplacementRoute(logicRoute);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        await showErrorDialog(
+            context, "Weak password : Password should be above 6 characters");
+      } else if (e.code == 'invalid-password') {
+        await showErrorDialog(context, 'Invalid-password');
+      } else if (e.code == 'email-already-in-use') {
+        await showErrorDialog(context,
+            'Email belongs to other user: Register with a different email');
+      } else {
+        await showErrorDialog(context, 'Error: $e.code');
+      }
+    } on TypeError catch (e) {
+      await showErrorDialog(context, e.toString());
+    } catch (e) {
+      await showErrorDialog(context, e.toString());
+    }
   }
 
   @override
@@ -165,64 +196,23 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                 const SizedBox(
                   height: 40,
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.transparent),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                decoratedButton(onPressed, 'Register', 200),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [Colors.lightBlueAccent, Colors.orangeAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                   ),
-                  onPressed: () async {
-                    try {
-                      String username = usernameController.text;
-                      String email = emailController.text;
-                      String password = passwordController.text;
-                      final form = formKey.currentState!;
-                      if (form.validate()) {}
-                      await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      addUser(email, username);
-                      pushReplacementRoute(logicRoute);
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'weak-password') {
-                        await showErrorDialog(context,
-                            "Weak password : Password should be above 6 characters");
-                      } else if (e.code == 'invalid-password') {
-                        await showErrorDialog(context, 'Invalid-password');
-                      } else if (e.code == 'email-already-in-use') {
-                        await showErrorDialog(context,
-                            'Email belongs to other user: Register with a different email');
-                      } else {
-                        await showErrorDialog(context, 'Error: $e.code');
-                      }
-                    } on TypeError catch (e) {
-                      await showErrorDialog(context, e.toString());
-                    } catch (e) {
-                      await showErrorDialog(context, e.toString());
-                    }
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: const LinearGradient(
-                        colors: [Colors.lightBlueAccent, Colors.orangeAccent],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text(
-                        "Register",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      "Register",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
                     ),
                   ),
                 ),

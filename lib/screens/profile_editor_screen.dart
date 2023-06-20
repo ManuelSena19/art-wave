@@ -1,6 +1,6 @@
-import 'dart:io' as io;
+import 'package:art_wave/constants/upload_to_firebase.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:image_picker/image_picker.dart';
 import 'package:art_wave/constants/is_android.dart';
 import 'package:art_wave/constants/push_routes.dart';
 import 'package:art_wave/constants/routes.dart';
@@ -9,11 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage_web/firebase_storage_web.dart';
-import 'package:firebase_core/firebase_core.dart' as fb;
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:image_picker_web/image_picker_web.dart';
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import '../constants/user_data.dart';
 
 final TextEditingController _usernameController = TextEditingController();
@@ -66,26 +63,33 @@ class EditProfileWeb extends StatefulWidget {
 }
 
 class _EditProfileWebState extends State<EditProfileWeb> {
-  html.File? _imageFile;
-  io.File? _file;
   final user = FirebaseAuth.instance.currentUser;
-  String _url = '';
+  String? _url;
 
   void pushReplacementNamed(String routeName) {
     pushReplacementRoute(context, routeName);
   }
 
-  Future<void> _pickImageWeb() async {
-    final html.File image = (await ImagePickerWeb.getImageAsFile())!;
-    final io.File ioImage = io.File(image.relativePath!);
-    setState(() {
-      _imageFile = image;
-      _file = ioImage;
-    });
+  Future<String?> selectPicture() async {
+    String url;
+    XFile? image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    url = image!.path;
+    await updateField('imagePath', url);
+    return url;
+  }
+
+  Future<void> uploadToFirebase() async {
+    String? path = await selectPicture();
+    Uint8List imageData = await XFile(path!).readAsBytes();
+    final Reference storageReference =
+        FirebaseStorage.instance.ref().child('profiles/');
+    storageReference.putData(imageData);
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     FilePicker.platform = FilePickerWeb.platform;
   }
@@ -127,11 +131,13 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                         height: 20,
                       ),
                       GestureDetector(
-                        onTap: _pickImageWeb,
+                        onTap: () async{
+                            _url = await uploadImageToFirebaseWeb();
+                        },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 350),
                           child: ClipOval(
-                            child: _imageFile != null
+                            child: _url != null
                                 ? Image.asset(
                                     'assets/success.jpg',
                                     fit: BoxFit.fill,
@@ -247,10 +253,11 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                           ),
                         ),
                         onPressed: () async {
-                          await updateField('imagePath', _url);
                           String name = _usernameController.text;
                           String bio = _aboutController.text;
                           String site = _websiteController.text;
+                          print(_url!);
+                          await updateField('imagePath', _url!);
                           await updateField('username', name);
                           await updateField('about', bio);
                           await updateField('website', site);
