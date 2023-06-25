@@ -1,28 +1,18 @@
 import 'package:art_wave/constants/upload_to_firebase.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:art_wave/constants/is_android.dart';
 import 'package:art_wave/constants/push_routes.dart';
 import 'package:art_wave/constants/routes.dart';
 import 'package:art_wave/screens/loading_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/_internal/file_picker_web.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../constants/user_data.dart';
 
 final TextEditingController _usernameController = TextEditingController();
 final TextEditingController _websiteController = TextEditingController();
 final TextEditingController _aboutController = TextEditingController();
 final String _email = FirebaseAuth.instance.currentUser!.email.toString();
-
-Future<void> updateField(String field, String newValue) async {
-  DocumentReference<Map<String, dynamic>> userRef =
-      FirebaseFirestore.instance.collection('users').doc(_email);
-  await userRef.update({field: newValue});
-}
 
 class EditProfile extends StatelessWidget {
   const EditProfile({super.key});
@@ -49,49 +39,19 @@ class EditProfileAndroid extends StatefulWidget {
 }
 
 class _EditProfileAndroidState extends State<EditProfileAndroid> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class EditProfileWeb extends StatefulWidget {
-  const EditProfileWeb({super.key});
-
-  @override
-  State<EditProfileWeb> createState() => _EditProfileWebState();
-}
-
-class _EditProfileWebState extends State<EditProfileWeb> {
-  final user = FirebaseAuth.instance.currentUser;
-  String? _url;
-
+  String? url;
   void pushReplacementNamed(String routeName) {
     pushReplacementRoute(context, routeName);
   }
 
-  Future<String?> selectPicture() async {
-    String url;
-    XFile? image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-    url = image!.path;
-    await updateField('imagePath', url);
-    return url;
-  }
-
-  Future<void> uploadToFirebase() async {
-    String? path = await selectPicture();
-    Uint8List imageData = await XFile(path!).readAsBytes();
-    final Reference storageReference =
-        FirebaseStorage.instance.ref().child('profiles/');
-    storageReference.putData(imageData);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FilePicker.platform = FilePickerWeb.platform;
+  void onPressed() async {
+    String name = _usernameController.text;
+    String bio = _aboutController.text;
+    String site = _websiteController.text;
+    await updateField(_email, 'username', name);
+    await updateField(_email, 'about', bio);
+    await updateField(_email, 'website', site);
+    pushReplacementNamed(profileRoute);
   }
 
   @override
@@ -112,6 +72,172 @@ class _EditProfileWebState extends State<EditProfileWeb> {
           _websiteController.text = website!;
           final String? about = userData['about'] as String?;
           _aboutController.text = about!;
+          final String? imagePath = userData['imagePath'] as String?;
+          return Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  const Text(
+                    'Edit Public Profile',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      url = await uploadImageToFirebaseAndroid(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 110),
+                      child: ClipOval(
+                        child: imagePath != null && imagePath.isNotEmpty
+                            ? Image.network(
+                                imagePath,
+                                fit: BoxFit.fill,
+                                height: 150,
+                              )
+                            : url != null
+                                ? Image.asset(
+                                    'assets/success.jpg',
+                                    fit: BoxFit.fill,
+                                    height: 150,
+                                  )
+                                : Image.asset(
+                                    'assets/user.jpg',
+                                    fit: BoxFit.fill,
+                                    height: 150,
+                                  ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    'Click on the image above to change your profile picture',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'Username',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  TextField(
+                    controller: _usernameController,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    'Website',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  TextField(
+                    controller: _websiteController,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    'About',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  TextField(
+                    controller: _aboutController,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50,),
+                  decoratedButton(onPressed, 'Save Changes', double.infinity)
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const Text("Check your network connection");
+        }
+      },
+    );
+  }
+}
+
+class EditProfileWeb extends StatefulWidget {
+  const EditProfileWeb({super.key});
+
+  @override
+  State<EditProfileWeb> createState() => _EditProfileWebState();
+}
+
+class _EditProfileWebState extends State<EditProfileWeb> {
+  final user = FirebaseAuth.instance.currentUser;
+  String? _url;
+
+  void pushReplacementNamed(String routeName) {
+    pushReplacementRoute(context, routeName);
+  }
+
+  void onPressed() async {
+    String name = _usernameController.text;
+    String bio = _aboutController.text;
+    String site = _websiteController.text;
+    await updateField(_email, 'username', name);
+    await updateField(_email, 'about', bio);
+    await updateField(_email, 'website', site);
+    pushReplacementNamed(profileRoute);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getUserData(_email),
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingScreen();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          final userData = snapshot.data!;
+          final String? username = userData['username'] as String?;
+          _usernameController.text = username!;
+          final String? website = userData['website'] as String?;
+          _websiteController.text = website!;
+          final String? about = userData['about'] as String?;
+          _aboutController.text = about!;
+          final String? imagePath = userData['imagePath'] as String?;
           return Scaffold(
             body: Padding(
               padding:
@@ -131,23 +257,29 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                         height: 20,
                       ),
                       GestureDetector(
-                        onTap: () async{
-                            _url = await uploadImageToFirebaseWeb();
+                        onTap: () async {
+                          _url = await uploadImageToFirebaseWeb(context);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 350),
                           child: ClipOval(
-                            child: _url != null
-                                ? Image.asset(
-                                    'assets/success.jpg',
+                            child: imagePath != null && imagePath.isNotEmpty
+                                ? Image.network(
+                                    imagePath,
                                     fit: BoxFit.fill,
                                     height: 150,
                                   )
-                                : Image.asset(
-                                    'assets/user.jpg',
-                                    fit: BoxFit.fill,
-                                    height: 150,
-                                  ),
+                                : _url != null
+                                    ? Image.asset(
+                                        'assets/success.jpg',
+                                        fit: BoxFit.fill,
+                                        height: 150,
+                                      )
+                                    : Image.asset(
+                                        'assets/user.jpg',
+                                        fit: BoxFit.fill,
+                                        height: 150,
+                                      ),
                           ),
                         ),
                       ),
@@ -208,9 +340,12 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                                     controller: _usernameController,
                                     maxLines: 1,
                                     decoration: const InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5)))),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -219,9 +354,12 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                                     maxLines: 1,
                                     controller: _websiteController,
                                     decoration: const InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5)))),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -230,9 +368,12 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                                     maxLines: 5,
                                     controller: _aboutController,
                                     decoration: const InputDecoration(
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5)))),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -240,52 +381,7 @@ class _EditProfileWebState extends State<EditProfileWeb> {
                           ],
                         ),
                       ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          elevation: MaterialStateProperty.all(0),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.transparent),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          String name = _usernameController.text;
-                          String bio = _aboutController.text;
-                          String site = _websiteController.text;
-                          print(_url!);
-                          await updateField('imagePath', _url!);
-                          await updateField('username', name);
-                          await updateField('about', bio);
-                          await updateField('website', site);
-                          pushReplacementNamed(profileRoute);
-                        },
-                        child: Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Colors.lightBlueAccent,
-                                Colors.orangeAccent
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Save Changes",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ),
-                      ),
+                      decoratedButton(onPressed, 'Save Changes', 200)
                     ],
                   ),
                 ),

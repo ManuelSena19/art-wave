@@ -8,3 +8,9 @@ Future<Map<String, dynamic>> getUserData(String email) async {
   }
   return {};
 }
+
+Future<void> updateField(String email, String field, String newValue) async {
+  DocumentReference<Map<String, dynamic>> userRef =
+  FirebaseFirestore.instance.collection('users').doc(email);
+  await userRef.update({field: newValue});
+}

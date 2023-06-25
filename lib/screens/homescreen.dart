@@ -1,5 +1,6 @@
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/category_tile.dart';
+import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -32,7 +33,298 @@ class HomeScreenAndroid extends StatefulWidget {
 class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: appbarWidget(context),
+      drawer: drawerWidget(context),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 600,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      'assets/home.jpg',
+                      fit: BoxFit.cover,
+                      height: 300,
+                      width: double.infinity,
+                    ),
+                    const Divider(
+                      thickness: 3,
+                      color: Colors.black,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Discover new art and artists',
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            const Text(
+                              'Browse our collection of artists, graphic designers and creators and find new artworks that inspire you',
+                              style:
+                              TextStyle(fontSize: 15, color: Colors.grey),
+                              softWrap: true,
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            Center(child: decoratedButton(() { }, 'Browse Artwork', 200))
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Featured',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Top Artists',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artistCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Trending',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'On Sale',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+              const SizedBox(
+                height: 40,
+              ),
+              const Text(
+                'Budget Finds',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard(),
+                    const SizedBox(
+                      width: 25,
+                    ),
+                    artCard()
+                  ],
+                ),
+              ),
+              const Divider(thickness: 3),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -150,43 +442,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                               height: 25,
                             ),
                             Center(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  elevation: MaterialStateProperty.all(0),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.transparent),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {},
-                                child: Container(
-                                  width: 250,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Colors.lightBlueAccent,
-                                        Colors.orangeAccent
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      'Browse Artworks',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: decoratedButton(() { }, 'Browse Artwork', 250)
                             ),
                           ],
                         ),
@@ -448,14 +704,14 @@ Widget artCard() {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         const SizedBox(
-          height: 15,
+          height: 10,
         ),
         const Text(
           "0.00",
           style: TextStyle(fontSize: 15),
         ),
         const SizedBox(
-          height: 15,
+          height: 10,
         ),
         const Text(
           'Artist',

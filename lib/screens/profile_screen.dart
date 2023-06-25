@@ -14,6 +14,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 String _email = FirebaseAuth.instance.currentUser!.email.toString();
 
+Future<void Function()?> openLink(String link) async {
+  final Uri url = Uri.parse(link);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url, mode: LaunchMode.platformDefault);
+  } else {
+    throw 'Could not launch $link';
+  }
+  return null;
+}
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -41,16 +51,6 @@ class ProfileScreenWeb extends StatefulWidget {
 class _ProfileScreenWebState extends State<ProfileScreenWeb> {
   void onPressed() {
     pushReplacementRoute(context, editProfileRoute);
-  }
-
-  Future<void Function()?> openLink(String link) async {
-    final Uri url = Uri.parse(link);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.platformDefault);
-    } else {
-      throw 'Could not launch $link';
-    }
-    return null;
   }
 
   @override
@@ -126,6 +126,7 @@ class _ProfileScreenWebState extends State<ProfileScreenWeb> {
                                 imagePath!,
                                 height: 200,
                                 width: 200,
+                                fit: BoxFit.fill,
                               ),
                             ),
                             const SizedBox(
@@ -268,6 +269,189 @@ class ProfileScreenAndroid extends StatefulWidget {
 class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return FutureBuilder<Map<String, dynamic>>(
+      future: getUserData(_email),
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingScreen();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          final userData = snapshot.data!;
+          final String? name = userData['username'] as String?;
+          final String? website = userData['website'] as String?;
+          final int? followers = userData['followers'] as int?;
+          final int? following = userData['following'] as int?;
+          int posts = 0;
+          final String? about = userData['about'] as String?;
+          final String? imagePath = userData['imagePath'] as String?;
+          if (about == "" && imagePath == "") {
+            return Material(
+              child: Container(
+                padding: const EdgeInsets.all(300),
+                width: 50,
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    const Text(
+                      "Click on the button to create your public profile",
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      softWrap: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black),
+                      onPressed: () {
+                        pushReplacementRoute(context, editProfileRoute);
+                      },
+                      child: const Text('Create'),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Scaffold(
+              appBar: appbarWidget(context),
+              drawer: drawerWidget(context),
+              body: Padding(
+                padding: const EdgeInsets.all(15),
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    Text(
+                      _email,
+                      style: GoogleFonts.roboto(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            imagePath!,
+                            fit: BoxFit.fill,
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [Text('$posts'), const Text('posts')],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              Text('$following'),
+                              const Text('following')
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              Text('$followers'),
+                              const Text('followers')
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      name!,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.link,
+                          color: Colors.grey,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            openLink(website);
+                          },
+                          child: Text(website!),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      about!,
+                      style: const TextStyle(fontSize: 15),
+                      maxLines: 5,
+                      softWrap: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: decoratedButton(() {
+                            pushReplacementRoute(context, editProfileRoute);
+                          }, 'Edit Profile', 250),
+                        ),
+                        Expanded(
+                          child: decoratedButton(() {}, 'Messages', 250),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(thickness: 2,),
+                    Padding(
+                      padding: const EdgeInsets.all(60),
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.camera_alt_outlined,
+                            size: 100,
+                            color: Colors.grey,
+                          ),
+                          const Text(
+                            "Share your Art",
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          const Text(
+                            "When you share your creations, they would appear here",
+                            style: TextStyle(fontSize: 20),
+                            softWrap: true,
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          decoratedButton(() {}, "Post Artwork", 150),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        } else {
+          return const Text("Check your network connection");
+        }
+      },
+    );
   }
 }
