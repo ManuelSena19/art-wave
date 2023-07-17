@@ -238,7 +238,9 @@ class _ProfileScreenWebState extends State<ProfileScreenWeb> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              decoratedButton(() {}, "Post Artwork", 150),
+                              decoratedButton(() {
+                                pushRoute(context, createRoute);
+                              }, "Post Artwork", 150),
                             ],
                           ),
                         )
@@ -416,7 +418,9 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Divider(thickness: 2,),
+                    const Divider(
+                      thickness: 2,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(60),
                       child: Column(
@@ -439,7 +443,9 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                           const SizedBox(
                             height: 30,
                           ),
-                          decoratedButton(() {}, "Post Artwork", 150),
+                          decoratedButton(() {
+                            pushRoute(context, createRoute);
+                          }, "Post Artwork", 150),
                         ],
                       ),
                     ),

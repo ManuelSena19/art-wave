@@ -1,7 +1,9 @@
 import 'package:art_wave/constants/logic.dart';
+import 'package:art_wave/screens/explore_screen.dart';
 import 'package:art_wave/screens/homescreen.dart';
 import 'package:art_wave/screens/loading_screen.dart';
 import 'package:art_wave/screens/login_screen.dart';
+import 'package:art_wave/screens/post_creation_screen.dart';
 import 'package:art_wave/screens/profile_editor_screen.dart';
 import 'package:art_wave/screens/profile_screen.dart';
 import 'package:art_wave/screens/register_screen.dart';
@@ -42,7 +44,10 @@ class MyApp extends StatelessWidget {
         loadingRoute: (context) => const LoadingScreen(),
         profileRoute: (context) => const ProfileScreen(),
         editProfileRoute: (context) => const EditProfile(),
+        exploreRoute: (context) => const ExploreScreen(),
+        createRoute: (context) => const CreateScreen(),
       },
+      theme: ThemeData(primaryColor: Colors.orange),
       home: const Logic(),
     );
   }

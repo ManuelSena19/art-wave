@@ -7,3 +7,5 @@ const verifyEmailRoute = '/verify-email-screen/';
 const loadingRoute = '/loading-screen/';
 const profileRoute = '/profile-screen/';
 const editProfileRoute = '/profile-editor-screen/';
+const exploreRoute = '/explore-screen/';
+const createRoute = '/create-post-screen/';

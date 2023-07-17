@@ -239,6 +239,7 @@ class _EditProfileWebState extends State<EditProfileWeb> {
           _aboutController.text = about!;
           final String? imagePath = userData['imagePath'] as String?;
           return Scaffold(
+            backgroundColor: Colors.grey,
             body: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 75, horizontal: 300),

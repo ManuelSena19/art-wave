@@ -340,7 +340,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appbarWidget(
-        context,
+        context
       ),
       drawer: drawerWidget(context),
       body: SafeArea(
@@ -369,10 +369,6 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   const SizedBox(
                     width: 10,
                   ),
-                  categoryTileWidget('NFTs', Colors.orangeAccent),
-                  const SizedBox(
-                    width: 10,
-                  ),
                   categoryTileWidget('Cultural', Colors.purpleAccent),
                   const SizedBox(
                     width: 10,
@@ -385,7 +381,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                   const SizedBox(
                     width: 10,
                   ),
-                  categoryTileWidget('Decoration', Colors.tealAccent),
+                  categoryTileWidget('Comics or Manga', Colors.tealAccent),
                   const SizedBox(
                     width: 10,
                   ),
