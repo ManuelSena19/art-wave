@@ -1,10 +1,15 @@
+import 'package:art_wave/constants/push_routes.dart';
+import 'package:art_wave/constants/routes.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/category_tile.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
+
+import 'loading_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -82,13 +87,16 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                             const Text(
                               'Browse our collection of artists, graphic designers and creators and find new artworks that inspire you',
                               style:
-                              TextStyle(fontSize: 15, color: Colors.grey),
+                                  TextStyle(fontSize: 15, color: Colors.grey),
                               softWrap: true,
                             ),
                             const SizedBox(
                               height: 25,
                             ),
-                            Center(child: decoratedButton(() { }, 'Browse Artwork', 200))
+                            Center(
+                                child: decoratedButton(() {
+                              pushRoute(context, exploreRoute);
+                            }, 'Browse Artwork', 200))
                           ],
                         ),
                       ),
@@ -111,36 +119,45 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return GestureDetector(
+                            onTap: (){
+                              pushRoute(context, postRoute);
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                artCard(post['imagePath']),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -155,38 +172,46 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard()
-                  ],
-                ),
-              ),
+                  height: 360,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const LoadingScreen();
+                      } else {
+                        final users = snapshot.data!.docs;
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: users.length,
+                          itemBuilder: (context, index) {
+                            final user = users[index];
+                            return GestureDetector(
+                              onTap: (){
+                                pushRoute(context, publicProfileRoute);
+                              },
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  artistCard(user['imagePath'], user['username']),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  )),
               const Divider(thickness: 3),
               const SizedBox(
                 height: 40,
@@ -199,36 +224,45 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return GestureDetector(
+                            onTap: (){
+                              pushRoute(context, postRoute);
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                artCard(post['imagePath']),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -243,36 +277,45 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return GestureDetector(
+                            onTap: (){
+                              pushRoute(context, postRoute);
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                artCard(post['imagePath']),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -287,36 +330,45 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return GestureDetector(
+                            onTap: (){
+                              pushRoute(context, postRoute);
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                artCard(post['imagePath']),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -339,9 +391,7 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbarWidget(
-        context
-      ),
+      appBar: appbarWidget(context),
       drawer: drawerWidget(context),
       body: SafeArea(
         child: Padding(
@@ -438,8 +488,8 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                               height: 25,
                             ),
                             Center(
-                              child: decoratedButton(() { }, 'Browse Artwork', 250)
-                            ),
+                                child: decoratedButton(
+                                    () {}, 'Browse Artwork', 250)),
                           ],
                         ),
                       ),
@@ -462,36 +512,40 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              artCard(post['imagePath']),
+                              const SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -506,38 +560,41 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artistCard()
-                  ],
-                ),
-              ),
+                  height: 360,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const LoadingScreen();
+                      } else {
+                        final users = snapshot.data!.docs;
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: users.length,
+                          itemBuilder: (context, index) {
+                            final user = users[index];
+                            return Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                artistCard(user['imagePath'], user['username']),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                  )),
               const Divider(thickness: 3),
               const SizedBox(
                 height: 40,
@@ -550,36 +607,40 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              artCard(post['imagePath']),
+                              const SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -594,36 +655,40 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              artCard(post['imagePath']),
+                              const SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -638,36 +703,40 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
                 height: 20,
               ),
               SizedBox(
-                height: 400,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard(),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    artCard()
-                  ],
+                height: 350,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('posts')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const LoadingScreen();
+                    } else {
+                      final posts = snapshot.data!.docs;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              artCard(post['imagePath']),
+                              const SizedBox(
+                                width: 10,
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
               ),
               const Divider(thickness: 3),
@@ -679,46 +748,21 @@ class _HomeScreenWebState extends State<HomeScreenWeb> {
   }
 }
 
-Widget artCard() {
+Widget artCard(String imagePath) {
   return SizedBox(
     width: 300,
-    child: Column(
-      children: [
-        SizedBox(
-          height: 300,
-          width: 300,
-          child: Image.asset(
-            "assets/no_photo.jpg",
-            fit: BoxFit.fill,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text(
-          'Title',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text(
-          "0.00",
-          style: TextStyle(fontSize: 15),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text(
-          'Artist',
-          style: TextStyle(color: Colors.orangeAccent, fontSize: 15),
-        ),
-      ],
+    child: SizedBox(
+      height: 300,
+      width: 300,
+      child: Image.network(
+        imagePath,
+        fit: BoxFit.cover,
+      ),
     ),
   );
 }
 
-Widget artistCard() {
+Widget artistCard(String imagePath, String name) {
   return SizedBox(
     width: 300,
     child: Column(
@@ -726,31 +770,22 @@ Widget artistCard() {
         SizedBox(
           height: 300,
           width: 300,
-          child: Image.asset(
-            "assets/user.jpg",
-            fit: BoxFit.fill,
+          child: Image.network(
+            imagePath,
+            fit: BoxFit.cover,
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Column(
-              children: [
-                Text('Name'),
-                SizedBox(
-                  height: 25,
-                ),
-                Text('Rating'),
-              ],
+            Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             Expanded(child: Container()),
             ElevatedButton(
               onPressed: () {},
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, elevation: 0),
               child: const Text('Follow'),
             )
           ],

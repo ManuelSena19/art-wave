@@ -63,7 +63,9 @@ Widget drawerWidget(BuildContext context) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           iconColor: Colors.orange,
-          onTap: () {},
+          onTap: () {
+            pushRoute(context, messagesRoute);
+          },
         ),
         const SizedBox(
           height: 10,
@@ -103,7 +105,9 @@ Widget drawerWidget(BuildContext context) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           iconColor: Colors.orange,
-          onTap: () {},
+          onTap: () {
+            pushRoute(context, settingsRoute);
+          },
         ),
         const SizedBox(
           height: 10,
@@ -115,7 +119,9 @@ Widget drawerWidget(BuildContext context) {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           iconColor: Colors.orange,
-          onTap: () {},
+          onTap: () {
+            pushRoute(context, reportRoute);
+          },
         ),
         const SizedBox(
           height: 10,
