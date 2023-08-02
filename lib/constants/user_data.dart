@@ -11,6 +11,15 @@ Future<Map<String, dynamic>> getUserData(String email) async {
 
 Future<void> updateField(String email, String field, String newValue) async {
   DocumentReference<Map<String, dynamic>> userRef =
-  FirebaseFirestore.instance.collection('users').doc(email);
+      FirebaseFirestore.instance.collection('users').doc(email);
   await userRef.update({field: newValue});
+}
+
+Future<int> getArtistPostCount(String artistEmail) async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('posts')
+      .where('artist', isEqualTo: artistEmail)
+      .get();
+
+  return querySnapshot.size;
 }

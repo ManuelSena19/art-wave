@@ -5,6 +5,7 @@ import 'package:art_wave/screens/loading_screen.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -283,9 +284,12 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
           final userData = snapshot.data!;
           final String? name = userData['username'] as String?;
           final String? website = userData['website'] as String?;
-          final int? followers = userData['followers'] as int?;
-          final int? following = userData['following'] as int?;
-          int posts = 0;
+          final List<dynamic>? followers =
+              userData['followers'] as List<dynamic>?;
+          final int followerCount = followers!.length;
+          final List<dynamic>? following =
+              userData['following'] as List<dynamic>?;
+          final int followingCount = following!.length;
           final String? about = userData['about'] as String?;
           final String? imagePath = userData['imagePath'] as String?;
           if (about == "" && imagePath == "") {
@@ -326,10 +330,21 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   children: [
-                    Text(
-                      _email,
-                      style: GoogleFonts.roboto(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        Text(
+                          _email,
+                          style: GoogleFonts.roboto(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(child: Container()),
+                        IconButton(
+                          onPressed: () {
+                            pushReplacementRoute(context, createRoute);
+                          },
+                          icon: const Icon(Icons.add_a_photo_outlined),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 10,
@@ -347,14 +362,30 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                         Expanded(
                           flex: 1,
                           child: Column(
-                            children: [Text('$posts'), const Text('posts')],
+                            children: [
+                              FutureBuilder(
+                                future: getArtistPostCount(_email),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const LoadingScreen();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    int postCount = snapshot.data ?? 0;
+                                    return Text('$postCount');
+                                  }
+                                },
+                              ),
+                              const Text('posts'),
+                            ],
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Column(
                             children: [
-                              Text('$following'),
+                              Text('$followingCount'),
                               const Text('following')
                             ],
                           ),
@@ -363,7 +394,7 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                           flex: 1,
                           child: Column(
                             children: [
-                              Text('$followers'),
+                              Text('$followerCount'),
                               const Text('followers')
                             ],
                           ),
@@ -406,12 +437,32 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                     Row(
                       children: [
                         Expanded(
-                          child: decoratedButton(() {
-                            pushReplacementRoute(context, editProfileRoute);
-                          }, 'Edit Profile', 250),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.lightBlueAccent,
+                                elevation: 0),
+                            onPressed: () {
+                              pushReplacementRoute(context, editProfileRoute);
+                            },
+                            child: const Text(
+                              'Edit Profile',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
                         ),
                         Expanded(
-                          child: decoratedButton(() {}, 'Messages', 250),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange, elevation: 0),
+                            onPressed: () {},
+                            child: const Text(
+                              'Messages',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -421,33 +472,93 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                     const Divider(
                       thickness: 2,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(60),
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.camera_alt_outlined,
-                            size: 100,
-                            color: Colors.grey,
-                          ),
-                          const Text(
-                            "Share your Art",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                          const Text(
-                            "When you share your creations, they would appear here",
-                            style: TextStyle(fontSize: 20),
-                            softWrap: true,
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          decoratedButton(() {
-                            pushRoute(context, createRoute);
-                          }, "Post Artwork", 150),
-                        ],
-                      ),
+                    FutureBuilder<int>(
+                      future: getArtistPostCount(_email),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const LoadingScreen();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          int postCount = snapshot.data ?? 0;
+                          if (postCount == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.all(60),
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 100,
+                                    color: Colors.grey,
+                                  ),
+                                  const Text(
+                                    "Share your Art",
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const Text(
+                                    "When you share your creations, they would appear here",
+                                    style: TextStyle(fontSize: 20),
+                                    softWrap: true,
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  decoratedButton(() {
+                                    pushRoute(context, createRoute);
+                                  }, "Post Artwork", 150),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                children: [
+                                  const Center(
+                                    child: Icon(Icons.photo_album_outlined),
+                                  ),
+                                  SizedBox(
+                                    height: 400,
+                                    child: StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('posts')
+                                          .where('artist', isEqualTo: _email)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Text('Error: ${snapshot.error}');
+                                        } else if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const LoadingScreen();
+                                        } else {
+                                          final posts = snapshot.data!.docs;
+                                          return GridView.builder(
+                                            itemCount: posts.length,
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount:
+                                                  3,
+                                              mainAxisSpacing: 8.0,
+                                              crossAxisSpacing: 8.0,
+                                            ),
+                                            itemBuilder: (context, index) {
+                                              final post = posts[index];
+                                              return Image.network('${post['imagePath']}', fit: BoxFit.cover,);
+                                            },
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }
+                      },
                     ),
                   ],
                 ),
