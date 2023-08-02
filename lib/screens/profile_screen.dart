@@ -446,7 +446,7 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                             },
                             child: const Text(
                               'Edit Profile',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ),
                         ),
@@ -460,7 +460,7 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                             onPressed: () {},
                             child: const Text(
                               'Messages',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ),
                         ),
@@ -529,7 +529,8 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                                           .snapshots(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasError) {
-                                          return Text('Error: ${snapshot.error}');
+                                          return Text(
+                                              'Error: ${snapshot.error}');
                                         } else if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
                                           return const LoadingScreen();
@@ -539,14 +540,16 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                                             itemCount: posts.length,
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount:
-                                                  3,
+                                              crossAxisCount: 3,
                                               mainAxisSpacing: 8.0,
                                               crossAxisSpacing: 8.0,
                                             ),
                                             itemBuilder: (context, index) {
                                               final post = posts[index];
-                                              return Image.network('${post['imagePath']}', fit: BoxFit.cover,);
+                                              return Image.network(
+                                                '${post['imagePath']}',
+                                                fit: BoxFit.cover,
+                                              );
                                             },
                                           );
                                         }

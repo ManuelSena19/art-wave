@@ -1,5 +1,6 @@
 import 'package:art_wave/constants/push_routes.dart';
 import 'package:art_wave/constants/routes.dart';
+import 'package:art_wave/screens/profile_public.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/category_tile.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
@@ -139,7 +140,7 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                         itemBuilder: (context, index) {
                           final post = posts[index];
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               pushRoute(context, postRoute);
                             },
                             child: Row(
@@ -192,15 +193,23 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                           itemBuilder: (context, index) {
                             final user = users[index];
                             return GestureDetector(
-                              onTap: (){
-                                pushRoute(context, publicProfileRoute);
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return PublicProfile(
+                                      artistEmail: user['email'],
+                                    );
+                                  }),
+                                );
                               },
                               child: Row(
                                 children: [
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  artistCard(user['imagePath'], user['username']),
+                                  artistCard(
+                                      user['imagePath'], user['username']),
                                   const SizedBox(
                                     width: 10,
                                   ),
@@ -244,7 +253,7 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                         itemBuilder: (context, index) {
                           final post = posts[index];
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               pushRoute(context, postRoute);
                             },
                             child: Row(
@@ -297,7 +306,7 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                         itemBuilder: (context, index) {
                           final post = posts[index];
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               pushRoute(context, postRoute);
                             },
                             child: Row(
@@ -350,7 +359,7 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                         itemBuilder: (context, index) {
                           final post = posts[index];
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               pushRoute(context, postRoute);
                             },
                             child: Row(

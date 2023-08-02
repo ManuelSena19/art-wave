@@ -54,7 +54,6 @@ class MyApp extends StatelessWidget {
         messagesRoute: (context) => const MessagesScreen(),
         reportRoute: (context) => const ReportScreen(),
         settingsRoute: (context) => const SettingsScreen(),
-        publicProfileRoute: (context) => const PublicProfile(),
         postRoute: (context) => const PostViewer()
       },
       theme: ThemeData(primaryColor: Colors.orange),
