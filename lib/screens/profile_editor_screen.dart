@@ -175,7 +175,9 @@ class _EditProfileAndroidState extends State<EditProfileAndroid> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 50,),
+                  const SizedBox(
+                    height: 50,
+                  ),
                   decoratedButton(onPressed, 'Save Changes', double.infinity)
                 ],
               ),

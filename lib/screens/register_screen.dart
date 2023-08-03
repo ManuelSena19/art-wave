@@ -61,13 +61,18 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
     Navigator.pushReplacementNamed(context, route);
   }
 
+  final List<dynamic> following = [];
+  final List<dynamic> followers = [];
+
   Future<void> addUser(String email, String username) async {
     final CollectionReference users = _firestore.collection('users');
     await users.doc(email).set({
       'username': username,
       'email': email,
       'imagePath':
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s'
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s',
+      'following': following,
+      'followers': followers,
     });
   }
 

@@ -292,7 +292,7 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
           final int followingCount = following!.length;
           final String? about = userData['about'] as String?;
           final String? imagePath = userData['imagePath'] as String?;
-          if (about == "" && imagePath == "") {
+          if (about == "") {
             return Material(
               child: Container(
                 padding: const EdgeInsets.all(300),

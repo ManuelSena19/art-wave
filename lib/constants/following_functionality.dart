@@ -144,7 +144,7 @@ Future<bool> isFollowing(String currentUserEmail, String otherUserEmail) async {
       return false;
     }
 
-    List<dynamic>? following = data['following'];
+    List<dynamic>? following = data['followers'];
 
     if (following == null) {
       return false;
