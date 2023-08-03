@@ -204,25 +204,6 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
                   height: 40,
                 ),
                 decoratedButton(onPressed, 'Register', 200),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [Colors.lightBlueAccent, Colors.orangeAccent],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      "Register",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 30,
                 ),
