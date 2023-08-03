@@ -66,6 +66,8 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
     await users.doc(email).set({
       'username': username,
       'email': email,
+      'imagePath':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s'
     });
   }
 

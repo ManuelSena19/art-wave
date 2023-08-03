@@ -6,11 +6,14 @@ import 'package:art_wave/utilities/category_tile.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
-
+import '../constants/following_functionality.dart';
 import 'loading_screen.dart';
+
+String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -208,8 +211,10 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  artistCard(
-                                      user['imagePath'], user['username']),
+                                  ArtistCard(
+                                      imagePath: user['imagePath'],
+                                      name: user['username'],
+                                      artistEmail: user['email']),
                                   const SizedBox(
                                     width: 10,
                                   ),
@@ -802,4 +807,70 @@ Widget artistCard(String imagePath, String name) {
       ],
     ),
   );
+}
+
+class ArtistCard extends StatelessWidget {
+  final String imagePath, name, artistEmail;
+  const ArtistCard(
+      {super.key,
+      required this.imagePath,
+      required this.name,
+      required this.artistEmail});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            width: 300,
+            child: Image.network(
+              imagePath,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Row(
+            children: [
+              Text(
+                name,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              Expanded(child: Container()),
+              FutureBuilder<bool>(
+                future: isFollowing(artistEmail, userEmail),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingScreen();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    bool isFollowing = snapshot.data ?? false;
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          elevation: 0),
+                      onPressed: () {
+                        if (isFollowing) {
+                          removeFollower(context, userEmail, artistEmail);
+                        } else {
+                          addFollower(context, artistEmail, userEmail);
+                        }
+                      },
+                      child: Text(
+                        isFollowing ? 'Unfollow' : 'Follow',
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

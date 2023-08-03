@@ -4,10 +4,14 @@ import 'package:art_wave/screens/profile_screen.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
+import '../constants/following_functionality.dart';
 import '../constants/is_android.dart';
+
+final String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
 
 class PublicProfile extends StatelessWidget {
   final String artistEmail;
@@ -171,15 +175,36 @@ class PublicProfileAndroid extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightBlueAccent,
-                              elevation: 0),
-                          onPressed: () {},
-                          child: const Text(
-                            'Follow',
-                            style: TextStyle(fontSize: 15),
-                          ),
+                        child: FutureBuilder<bool>(
+                          future: isFollowing(artistEmail, userEmail),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const LoadingScreen();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              bool isFollowing = snapshot.data ?? false;
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.lightBlueAccent,
+                                    elevation: 0),
+                                onPressed: () {
+                                  if (isFollowing) {
+                                    removeFollower(
+                                        context, userEmail, artistEmail);
+                                  } else {
+                                    addFollower(
+                                        context, artistEmail, userEmail);
+                                  }
+                                },
+                                child: Text(
+                                  isFollowing ? 'Unfollow' : 'Follow',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(
