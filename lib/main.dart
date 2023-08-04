@@ -7,7 +7,6 @@ import 'package:art_wave/screens/messages_screen.dart';
 import 'package:art_wave/screens/post_creation_screen.dart';
 import 'package:art_wave/screens/post_viewing_screen.dart';
 import 'package:art_wave/screens/profile_editor_screen.dart';
-import 'package:art_wave/screens/profile_public.dart';
 import 'package:art_wave/screens/profile_screen.dart';
 import 'package:art_wave/screens/register_screen.dart';
 import 'package:art_wave/screens/report_screen.dart';

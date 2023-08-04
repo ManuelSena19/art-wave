@@ -61,7 +61,7 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
     Navigator.pushReplacementNamed(context, route);
   }
 
-  final List<dynamic> following = [];
+  final List<dynamic> following = ['emmanueldokeii@gmail.com'];
   final List<dynamic> followers = [];
 
   Future<void> addUser(String email, String username) async {
@@ -73,6 +73,8 @@ class _RegisterScreenAndroidState extends State<RegisterScreenAndroid> {
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s',
       'following': following,
       'followers': followers,
+      'about': '',
+      'website': ''
     });
   }
 

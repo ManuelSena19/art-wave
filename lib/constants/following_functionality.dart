@@ -126,8 +126,6 @@ Future<void> addFollower(BuildContext context, String currentUserEmail,
   }
 }
 
-
-
 Future<bool> isFollowing(String currentUserEmail, String otherUserEmail) async {
   try {
     if (currentUserEmail == otherUserEmail) {
@@ -135,24 +133,24 @@ Future<bool> isFollowing(String currentUserEmail, String otherUserEmail) async {
     }
 
     DocumentReference currentUserRef =
-    FirebaseFirestore.instance.collection('users').doc(currentUserEmail);
+        FirebaseFirestore.instance.collection('users').doc(currentUserEmail);
 
     DocumentSnapshot currentUserSnapshot = await currentUserRef.get();
-    Map<String, dynamic>? data = currentUserSnapshot.data() as Map<String, dynamic>?;
+    Map<String, dynamic>? data =
+        currentUserSnapshot.data() as Map<String, dynamic>?;
 
     if (data == null) {
       return false;
     }
 
-    List<dynamic>? following = data['followers'];
+    List<dynamic>? followers = data['followers'];
 
-    if (following == null) {
+    if (followers == null) {
       return false;
     }
 
-    return following.contains(otherUserEmail);
+    return followers.contains(otherUserEmail);
   } catch (e) {
     return false;
   }
 }
-

@@ -282,20 +282,21 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final userData = snapshot.data!;
-          final String? name = userData['username'] as String?;
-          final String? website = userData['website'] as String?;
+          final String name = userData['username'] as String? ?? 'name';
+          final String website = userData['website'] as String? ?? 'website';
           final List<dynamic>? followers =
               userData['followers'] as List<dynamic>?;
-          final int followerCount = followers!.length;
+          final int followerCount = followers?.length ?? 0;
           final List<dynamic>? following =
               userData['following'] as List<dynamic>?;
-          final int followingCount = following!.length;
-          final String? about = userData['about'] as String?;
-          final String? imagePath = userData['imagePath'] as String?;
+          final int followingCount = following?.length ?? 0;
+          final String about = userData['about'] as String? ?? "about";
+          final String imagePath = userData['imagePath'] as String? ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s';
           if (about == "") {
             return Material(
               child: Container(
-                padding: const EdgeInsets.all(300),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 300, horizontal: 100),
                 width: 50,
                 color: Colors.white,
                 child: Column(
@@ -353,7 +354,7 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                       children: [
                         ClipOval(
                           child: Image.network(
-                            imagePath!,
+                            imagePath,
                             fit: BoxFit.fill,
                             height: 100,
                             width: 100,
@@ -405,28 +406,32 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                       height: 10,
                     ),
                     Text(
-                      name!,
-                      style: const TextStyle(fontSize: 20),
+                      name,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.link,
-                          color: Colors.grey,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            openLink(website);
-                          },
-                          child: Text(website!),
-                        ),
-                      ],
-                    ),
+                    website != ""
+                        ? Row(
+                            children: [
+                              const Icon(
+                                Icons.link,
+                                color: Colors.grey,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  openLink(website);
+                                },
+                                child: Text(website),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(
+                            height: 1,
+                          ),
                     const SizedBox(
                       height: 5,
                     ),
                     Text(
-                      about!,
+                      about,
                       style: const TextStyle(fontSize: 15),
                       maxLines: 5,
                       softWrap: true,
@@ -538,18 +543,22 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                                           final posts = snapshot.data!.docs;
                                           return GridView.builder(
                                             itemCount: posts.length,
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 3,
                                               mainAxisSpacing: 8.0,
                                               crossAxisSpacing: 8.0,
                                             ),
                                             itemBuilder: (context, index) {
                                               final post = posts[index];
-                                              return Image.network(
-                                                '${post['imagePath']}',
-                                                fit: BoxFit.cover,
-                                              );
+                                              final imagePath = post['imagePath'] as String?;
+                                              if (imagePath != null) {
+                                                return Image.network(
+                                                  imagePath,
+                                                  fit: BoxFit.cover,
+                                                );
+                                              } else {
+                                                return const Placeholder();
+                                              }
                                             },
                                           );
                                         }

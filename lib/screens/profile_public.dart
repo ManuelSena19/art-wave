@@ -144,22 +144,26 @@ class PublicProfileAndroid extends StatelessWidget {
                   ),
                   Text(
                     name!,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.link,
-                        color: Colors.grey,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          openLink(website);
-                        },
-                        child: Text(website!),
-                      ),
-                    ],
-                  ),
+                  website != ""
+                      ? Row(
+                          children: [
+                            const Icon(
+                              Icons.link,
+                              color: Colors.grey,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                openLink(website);
+                              },
+                              child: Text(website!),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(
+                          height: 1,
+                        ),
                   const SizedBox(
                     height: 5,
                   ),
@@ -240,7 +244,7 @@ class PublicProfileAndroid extends StatelessWidget {
                         int postCount = snapshot.data ?? 0;
                         if (postCount == 0) {
                           return const Padding(
-                            padding: EdgeInsets.all(60),
+                            padding: EdgeInsets.all(30),
                             child: Column(
                               children: [
                                 Icon(
@@ -251,6 +255,7 @@ class PublicProfileAndroid extends StatelessWidget {
                                 Text(
                                   "There are no posts to see",
                                   softWrap: true,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold),

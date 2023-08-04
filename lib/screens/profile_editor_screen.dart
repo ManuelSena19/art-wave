@@ -67,11 +67,11 @@ class _EditProfileAndroidState extends State<EditProfileAndroid> {
         } else if (snapshot.hasData) {
           final userData = snapshot.data!;
           final String? username = userData['username'] as String?;
-          _usernameController.text = username!;
+          _usernameController.text = username ?? "";
           final String? website = userData['website'] as String?;
-          _websiteController.text = website!;
+          _websiteController.text = website ?? "";
           final String? about = userData['about'] as String?;
-          _aboutController.text = about!;
+          _aboutController.text = about ?? "";
           final String? imagePath = userData['imagePath'] as String?;
           return Scaffold(
             body: Padding(
@@ -90,25 +90,27 @@ class _EditProfileAndroidState extends State<EditProfileAndroid> {
                     onTap: () async {
                       url = await uploadImageToFirebaseAndroid(context);
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 110),
+                    child: Center(
                       child: ClipOval(
                         child: imagePath != null && imagePath.isNotEmpty
                             ? Image.network(
                                 imagePath,
                                 fit: BoxFit.fill,
                                 height: 150,
+                                width: 150,
                               )
                             : url != null
                                 ? Image.asset(
                                     'assets/success.jpg',
                                     fit: BoxFit.fill,
                                     height: 150,
+                                    width: 150,
                                   )
                                 : Image.asset(
                                     'assets/user.jpg',
                                     fit: BoxFit.fill,
                                     height: 150,
+                                    width: 150,
                                   ),
                       ),
                     ),

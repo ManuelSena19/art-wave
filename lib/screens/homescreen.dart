@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
-import '../constants/following_functionality.dart';
 import 'loading_screen.dart';
 
 String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
@@ -195,31 +194,31 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                           itemCount: users.length,
                           itemBuilder: (context, index) {
                             final user = users[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return PublicProfile(
-                                      artistEmail: user['email'],
+                            return Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) {
+                                        return PublicProfile(
+                                          artistEmail: user['email'],
+                                        );
+                                      }),
                                     );
-                                  }),
-                                );
-                              },
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  ArtistCard(
+                            },
+                                  child: ArtistCard(
                                       imagePath: user['imagePath'],
                                       name: user['username'],
                                       artistEmail: user['email']),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                              ],
                             );
                           },
                         );
@@ -839,33 +838,11 @@ class ArtistCard extends StatelessWidget {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Expanded(child: Container()),
-              FutureBuilder<bool>(
-                future: isFollowing(artistEmail, userEmail),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const LoadingScreen();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    bool isFollowing = snapshot.data ?? false;
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          elevation: 0),
-                      onPressed: () {
-                        if (isFollowing) {
-                          removeFollower(context, userEmail, artistEmail);
-                        } else {
-                          addFollower(context, artistEmail, userEmail);
-                        }
-                      },
-                      child: Text(
-                        isFollowing ? 'Unfollow' : 'Follow',
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                    );
-                  }
-                },
+              const Row(
+                children: [
+                  Icon(Icons.star, color: Colors.yellow, size: 30,),
+                  Text('5.0', style: TextStyle(fontSize: 18),)
+                ],
               ),
             ],
           )
