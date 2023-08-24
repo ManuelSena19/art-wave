@@ -291,7 +291,8 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
               userData['following'] as List<dynamic>?;
           final int followingCount = following?.length ?? 0;
           final String about = userData['about'] as String? ?? "about";
-          final String imagePath = userData['imagePath'] as String? ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s';
+          final String imagePath = userData['imagePath'] as String? ??
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4R9w1OwQjbnun15jlbPEDqicrbEsAnBeSQOFpvuEE2A&s';
           if (about == "") {
             return Material(
               child: Container(
@@ -407,7 +408,8 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                     ),
                     Text(
                       name,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     website != ""
                         ? Row(
@@ -543,14 +545,16 @@ class _ProfileScreenAndroidState extends State<ProfileScreenAndroid> {
                                           final posts = snapshot.data!.docs;
                                           return GridView.builder(
                                             itemCount: posts.length,
-                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 3,
                                               mainAxisSpacing: 8.0,
                                               crossAxisSpacing: 8.0,
                                             ),
                                             itemBuilder: (context, index) {
                                               final post = posts[index];
-                                              final imagePath = post['imagePath'] as String?;
+                                              final imagePath =
+                                                  post['imagePath'] as String?;
                                               if (imagePath != null) {
                                                 return Image.network(
                                                   imagePath,

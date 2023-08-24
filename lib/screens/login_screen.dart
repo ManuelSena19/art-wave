@@ -63,8 +63,9 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/art.png"), fit: BoxFit.cover)),
+          image: DecorationImage(
+              image: AssetImage("assets/art.png"), fit: BoxFit.cover),
+        ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(50, 120, 50, 120),
           child: Container(
@@ -77,10 +78,12 @@ class _LoginScreenAndroidState extends State<LoginScreenAndroid> {
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
                   child: Text(
                     'Art Wave',
-                    style: GoogleFonts.vibur(textStyle: const TextStyle(
-                        color: Colors.deepOrangeAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),),
+                    style: GoogleFonts.vibur(
+                      textStyle: const TextStyle(
+                          color: Colors.deepOrangeAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
                   ),
                 ),
                 Container(
@@ -273,10 +276,12 @@ class _LoginScreenWebState extends State<LoginScreenWeb> {
                       padding: const EdgeInsets.fromLTRB(10, 60, 10, 10),
                       child: Text(
                         'Art Wave',
-                        style: GoogleFonts.vibur(textStyle: const TextStyle(
-                            color: Colors.deepOrangeAccent,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),),
+                        style: GoogleFonts.vibur(
+                          textStyle: const TextStyle(
+                              color: Colors.deepOrangeAccent,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30),
+                        ),
                       ),
                     ),
                     Container(

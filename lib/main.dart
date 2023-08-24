@@ -1,4 +1,5 @@
 import 'package:art_wave/constants/logic.dart';
+import 'package:art_wave/screens/account_settings_screen.dart';
 import 'package:art_wave/screens/explore_screen.dart';
 import 'package:art_wave/screens/homescreen.dart';
 import 'package:art_wave/screens/loading_screen.dart';
@@ -53,7 +54,9 @@ class MyApp extends StatelessWidget {
         messagesRoute: (context) => const MessagesScreen(),
         reportRoute: (context) => const ReportScreen(),
         settingsRoute: (context) => const SettingsScreen(),
-        postRoute: (context) => const PostViewer()
+        postRoute: (context) => const PostViewer(),
+        accountSettingsRoute: (context) => const AccountSettings(),
+        accountInfoRoute: (context) => const AccountInfoScreen(),
       },
       theme: ThemeData(primaryColor: Colors.orange),
       home: const Logic(),

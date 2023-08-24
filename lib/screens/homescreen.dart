@@ -1,6 +1,7 @@
 import 'package:art_wave/constants/push_routes.dart';
 import 'package:art_wave/constants/routes.dart';
 import 'package:art_wave/screens/profile_public.dart';
+import 'package:art_wave/screens/profile_screen.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/category_tile.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
@@ -200,16 +201,23 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                                   width: 10,
                                 ),
                                 GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) {
-                                        return PublicProfile(
-                                          artistEmail: user['email'],
-                                        );
-                                      }),
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          if (user['email'] == FirebaseAuth.instance.currentUser!.email.toString()){
+                                            return const ProfileScreen();
+                                          }
+                                          else{
+                                            return PublicProfile(
+                                              artistEmail: user['email'],
+                                            );
+                                          }
+                                        },
+                                      ),
                                     );
-                            },
+                                  },
                                   child: ArtistCard(
                                       imagePath: user['imagePath'],
                                       name: user['username'],
@@ -840,8 +848,15 @@ class ArtistCard extends StatelessWidget {
               Expanded(child: Container()),
               const Row(
                 children: [
-                  Icon(Icons.star, color: Colors.yellow, size: 30,),
-                  Text('5.0', style: TextStyle(fontSize: 18),)
+                  Icon(
+                    Icons.star,
+                    color: Colors.yellow,
+                    size: 30,
+                  ),
+                  Text(
+                    '5.0',
+                    style: TextStyle(fontSize: 18),
+                  )
                 ],
               ),
             ],
