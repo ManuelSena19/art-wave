@@ -4,6 +4,7 @@ import 'package:art_wave/screens/explore_screen.dart';
 import 'package:art_wave/screens/homescreen.dart';
 import 'package:art_wave/screens/loading_screen.dart';
 import 'package:art_wave/screens/login_screen.dart';
+import 'package:art_wave/screens/main_navigation_screen.dart';
 import 'package:art_wave/screens/messages_screen.dart';
 import 'package:art_wave/screens/post_creation_screen.dart';
 import 'package:art_wave/screens/post_viewing_screen.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: FirebaseAuth.instance.currentUser == null
           ? loginRoute
-          : homescreenRoute,
+          : mainRoute,
       routes: {
         homescreenRoute: (context) => const HomeScreen(),
         loginRoute: (context) => const LoginScreen(),
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         postRoute: (context) => const PostViewer(),
         accountSettingsRoute: (context) => const AccountSettings(),
         accountInfoRoute: (context) => const AccountInfoScreen(),
+        mainRoute: (context) => const MainNavigation()
       },
       theme: ThemeData(primaryColor: Colors.orange),
       home: const Logic(),

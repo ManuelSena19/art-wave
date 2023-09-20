@@ -36,7 +36,7 @@ Widget drawerWidget(BuildContext context) {
           ),
           iconColor: Colors.orange,
           onTap: () {
-            pushRoute(context, homescreenRoute);
+            pushRoute(context, mainRoute);
           },
         ),
         const SizedBox(

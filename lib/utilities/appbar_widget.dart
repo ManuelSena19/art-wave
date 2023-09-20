@@ -7,7 +7,7 @@ PreferredSizeWidget? appbarWidget(BuildContext context) {
     backgroundColor: Colors.transparent,
     title: GestureDetector(
       onTap: () {
-        pushRoute(context, homescreenRoute);
+        pushRoute(context, mainRoute);
       },
       child: ClipOval(
         child: Image.asset(

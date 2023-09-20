@@ -16,3 +16,4 @@ const publicProfileRoute = '/public-profile-screen/';
 const postRoute = '/post-viewing-screen';
 const accountSettingsRoute = '/account-settings-screen/';
 const accountInfoRoute = '/account-info-screen/';
+const mainRoute = '/main-navigation-route/';

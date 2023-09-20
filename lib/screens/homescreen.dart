@@ -206,10 +206,12 @@ class _HomeScreenAndroidState extends State<HomeScreenAndroid> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) {
-                                          if (user['email'] == FirebaseAuth.instance.currentUser!.email.toString()){
+                                          if (user['email'] ==
+                                              FirebaseAuth
+                                                  .instance.currentUser!.email
+                                                  .toString()) {
                                             return const ProfileScreen();
-                                          }
-                                          else{
+                                          } else {
                                             return PublicProfile(
                                               artistEmail: user['email'],
                                             );

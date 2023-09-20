@@ -442,7 +442,7 @@ class _CreateScreenAndroidState extends State<CreateScreenAndroid> {
                 List<String> tags = selectedTags;
                 String description = _descriptionController.text;
                 createPost(name, artist, description, _imagePath!, price, tags);
-                pushReplacementRoute(context, homescreenRoute);
+                pushReplacementRoute(context, mainRoute);
               }, 'Post', 200),
             ),
             const SizedBox(

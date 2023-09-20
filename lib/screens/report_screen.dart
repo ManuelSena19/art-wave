@@ -3,11 +3,25 @@ import 'package:art_wave/constants/routes.dart';
 import 'package:art_wave/utilities/appbar_widget.dart';
 import 'package:art_wave/utilities/decorated_button.dart';
 import 'package:art_wave/utilities/drawer_widget.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:intl/intl.dart';
 import 'dart:io';
-import '../utilities/show_error_dialog.dart';
+
+Future<void> sendReport(String title, String content) async{
+  final CollectionReference reports = FirebaseFirestore.instance.collection('reports');
+  DateTime currentTime = DateTime.now();
+  DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+  String formattedTime = formatter.format(currentTime);
+  await reports.doc(title).set({
+    'title': title,
+    'content': content,
+    'date': formattedTime,
+    'sender': FirebaseAuth.instance.currentUser!.email.toString(),
+  });
+}
 
 
 class ReportScreen extends StatelessWidget {
@@ -42,7 +56,7 @@ class _ReportScreenAndroidState extends State<ReportScreenAndroid> {
   Widget build(BuildContext context) {
 
     void pushHomeScreenRoute(){
-      pushReplacementRoute(context, homescreenRoute);
+      pushReplacementRoute(context, mainRoute);
     }
 
     return Scaffold(
@@ -92,20 +106,10 @@ class _ReportScreenAndroidState extends State<ReportScreenAndroid> {
             ),
             Center(
               child: decoratedButton(() async {
-                String subject = titleController.text;
-                String body = contentController.text;
-                try{
-                  final Email email = Email(
-                    body: body,
-                    subject: subject,
-                    recipients: ['emmanueldokeii@gmail.com'],
-                    isHTML: false,
-                  );
-                  await FlutterEmailSender.send(email);
-                  pushHomeScreenRoute();
-                } catch (e){
-                  await showErrorDialog(context, e.toString());
-                }
+                String title = titleController.text;
+                String content = contentController.text;
+                await sendReport(title, content);
+                pushHomeScreenRoute();
               }, 'Submit', 200),
             ),
           ],
